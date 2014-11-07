@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>4D MRI Blood Flow Visualisation</title>
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link rel="stylesheet" href="css/main.css" type="text/css" media="screen">
+		<link rel="stylesheet" href="css/spinner.css" type="text/css" media="screen">
+		<!-- Shader scripts -->
+		<!-- Particle Shader-->
+		<script type="x-shader/x-vertex" id="particlevertexshader">
+		varying vec3 vColor;
+		attribute float visibility;
+		varying   float vvisibility;
+		attribute vec3 customColor;
+		
+		
+		void main() 
+		{
+		vColor = customColor; // set color associated to vertex; use later in fragment shader.
+		vvisibility = visibility;
+		vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+		gl_PointSize = 6.0 + 150.0 / length( mvPosition.xyz ) ;
+		gl_Position = projectionMatrix * mvPosition;
+		}
+		</script>
+		<script type="x-shader/x-fragment" id="particlefragmentshader">
+		varying vec3 vColor;
+		varying float vvisibility;
+		uniform sampler2D texture;
+		
+		void main() {
+
+			if ( vvisibility > 0.5) {
+			gl_FragColor = vec4( vColor, 1.0 );
+			gl_FragColor = gl_FragColor*texture2D( texture, gl_PointCoord );
+			} else{}
+		}
+		</script>
+
+		<!-- Lines Shader-->
+		<script type="x-shader/x-vertex" id="linevertexshader">
+		varying   float distance;
+		varying vec3 vColor;
+		varying float vTime;
+		attribute float time;
+
+		void main() {
+
+			vColor = color;
+			vTime = time;
+		    gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+
+		}
+		</script>
+		<script type="x-shader/x-fragment" id="linefragmentshader">
+		varying vec3 vColor;
+		varying float vTime;
+
+		uniform float curTime;
+		uniform int slidingWindow;
+		uniform float tailLength;
+
+		void main() {
+			if(vTime > curTime-3.0) discard;
+			if(slidingWindow == 1 && vTime < curTime - tailLength) discard;
+			gl_FragColor = vec4( vColor, 1.0 );
+
+		}
+		
+		</script>
+		<!-- Appearance scripts -->
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+		</script>
+		<script>
+		$(document).ready(function(){
+		  $(".infobox-button").click(function(){
+		    $(".infobox").toggleClass('infobox-slide');
+		    $(".infobox-button-container").toggleClass('infobox-button-container-slide');
+		    $(".infobox-button-icon").toggleClass('clicked');
+		    $(".params").toggleClass('params-slide');
+		  });
+		});
+        </script>
+	</head>
+	<body>
+	    <div id="container"></div>
+
+		<div class="logos">
+			<a href="http://w3.bmt.tue.nl/en/research/divisions_bme/biomedical_imaging_modeling/biomedical_image_analysis" target="_blank"><img src="img/TUe.png" alt="University of Technology Eindhoven" height="40"></a><a href="http://www.kcl.ac.uk/" target="_blank"><img src="img/KCL.png" alt="King's College London" height="40"></a>
+		</div>
+
+        <div class="infobox-button-container infobox-button-container-slide">
+          <button class="infobox-button">
+		    <label class="infobox-button-label">info</label>
+		    <div class="infobox-button-icon clicked"></div>
+          </button>
+        </div>
+
+		<div class="params params-slide">
+			<div class="speedscale">
+				<div class="minSpeed"><span id="minSpeedText">0</span> cm/s</div>
+				<div class="maxSpeed"><span id="maxSpeedText">200</span> cm/s</div>
+			</div>
+		</div>
+
+		<div class="infobox infobox-slide">
+		  <div class="infobox-author">
+		    <b>Developed by:</b><br/>
+		    <a href="http://www.martijnpieters.nl/" target="_blank">Martijn Pieters</a></br>
+		    <b>With support of:</b></br>
+		    <a href="http://scholar.google.com/citations?user=mweZfikAAAAJ&hl=nl" target="_blank">Roy van Pelt</a><br/>
+		    <a href="http://scholar.google.com/citations?user=P83cpEEAAAAJ&hl=nl" target="_blank">Anna Vilanova</a>
+		  </div>
+		  <div class="infobox-text">
+		    <b>This work is based on:</b><br/>
+		    <a href="http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=5613474" target="_blank">Exploration of 4D MRI Blood Flow using Stylistic Visualization</a><br/>
+		    R van Pelt, J Oliv&aacute;n Besc&oacute;s, M Breeuwer, R.E. Clough, M.E. Gr&ouml;ller, B ter Haar Romeny, Anna Vilanova<br/>
+
+            <a href="http://isgwww.cs.uni-magdeburg.de/visual/index.php?article_id=289&clang=0&bibtex_key=Kohler_2013_SciVis" target="_blank">Semi-Automatic Vortex Extraction in 4D PC-MRI Cardiac Blood Flow Data using Line Predicates</a><br/>
+		    B. K&ouml;hler, R. Gasteiger, U. Preim, H. Theisel, M. Gutberlet and B. Preim</br>
+		    <b>Acknowledgements:</b><br/>
+		    prof. T. Schaeffter, dr. R.E. Clough, dr. I. Valverde
+		  </div>
+		</div>
+
+
+		<div id="loader">
+			<div class="spinner">
+				<div class="bar1"></div>
+				<div class="bar2"></div>
+				<div class="bar3"></div>
+				<div class="bar4"></div>
+				<div class="bar5"></div>
+				<div class="bar6"></div>
+				<div class="bar7"></div>
+				<div class="bar8"></div>
+				<div class="bar9"></div>
+				<div class="bar10"></div>
+				<div class="bar11"></div>
+				<div class="bar12"></div>
+			</div>
+			<div id="spinnerText">Loading cardiac phase <span id="spinnerCount">1</span> of <span id="spinnerTotal">2</span></div>
+		</div>
+		
+		
+		
+	<script type="text/javascript" src="js/moving-averager.js"></script>
+	<script type="text/javascript" src="js/request-animation-frame.js"></script>
+	<!--script type="text/javascript" src="js1/dat.gui.min.js"></script-->	
+ 	<script type="text/javascript" src="js/simple-motion-detector.js"></script>
+	<script type="text/javascript" src="js/detector.js"></script>
+	<script type="text/javascript" src="js/glfx-neu.js"></script>
+	<!--script type="text/javascript" src="js/three.min.js"></script-->	
+
+					<script src="http://code.jquery.com/jquery-2.0.0.js" type="text/javascript"></script>
+					<script src="js/spinner.js" type="text/javascript"></script>
+
+					<script src="js/three.min.js" type="text/javascript"></script>
+					<script src="js/TrackballControls.js" type="text/javascript"></script>
+					<script src="js/Detector.js" type="text/javascript"></script>
+					<script src="js/stats.min.js" type="text/javascript"></script>
+
+					<script src="js/JSONLoader.js" type="text/javascript"></script>
+					<script src="js/JSONLineLoader.js" type="text/javascript"></script>
+					<script src="js/main.js" type="text/javascript"></script>
+					<script src="js/webgl.js" type="text/javascript"></script>
+					<script src="js/dat.gui.min.js" type="text/javascript"></script>
+
+					<script type="text/javascript">
+
+					  var _gaq = _gaq || [];
+					  _gaq.push(['_setAccount', 'UA-42546421-1']);
+					  _gaq.push(['_setDomainName', 'martijnpieters.nl']);
+					  _gaq.push(['_trackPageview']);
+
+					  (function() {
+					    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+					    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+					    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+					  })();
+
+		</script>
+
+
+
+	</body>
+</html>

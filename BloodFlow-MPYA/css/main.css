@@ -1,0 +1,220 @@
+body {
+	font-family: Helvetica;
+	font-size: 12px;
+	background-color: #EEE;
+	color: #20232a;
+	margin: 0px;
+	overflow: hidden;
+	line-height: 25px;
+}
+
+canvas {
+	outline: none;
+	position: absolute;
+	z-index: 0;
+}
+
+button {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font: inherit;
+  vertical-align: baseline;
+  background: transparent;
+  list-style: none;
+  color: inherit;
+}
+
+a:link {color:#000000;}    /* unvisited link */
+a:visited {color:#B00000;} /* visited link */
+a:hover {color:#B00000;}   /* mouse over link */
+a:active {color:#B00000;}  /* selected link */
+
+.speedscale {
+	background-image: -webkit-gradient(
+		linear,
+		left top,
+		right top,
+		color-stop(0, rgb(0,0,0)),
+		color-stop(0.4, rgb(230,0,0)),
+		color-stop(0.8, rgb(230,230,0)),
+		color-stop(1, rgb(255,255,255))
+	);
+  background: linear-gradient(to right, rgb(0,0,0), rgb(0,0,0), rgb(230,0,0), rgb(230,0,0), rgb(230,230,0), rgb(255,255,255));
+	width: 180px;
+	height: 25px;
+  box-shadow: 0px 1px 4px rgba(0,0,0,0.3);
+}
+
+.params {
+	width: 180px;
+	bottom: 150px;
+	right: 0;
+  height : 40px;
+	position: absolute;
+	z-index: 100;
+  margin: 10px;
+  
+  -webkit-transition-duration: 1s;
+}
+
+.params-slide {
+  transform: translate(0px, 155px);
+  -ms-transform: translate(0px, 155px);
+  -moz-transform: translate(0px, 155px);
+  -webkit-transform: translate(0px, 155px);
+  -o-transform: translate(0px, 0);
+  -webkit-transition-duration: 1s;
+}
+
+.minSpeed {
+	color: #FFF;
+	float: left;
+	margin: 0 0 0 5px;
+}
+
+.maxSpeed {
+	color: #444;
+	float: right;
+	margin: 0 5px 0 0;
+}
+
+.logos {
+	bottom: 0;
+	left: 0;
+  height: 40px;
+  margin: 10px;
+	position: absolute;
+	z-index: 100;  
+}
+
+.logos a {
+    display: block;
+    float: left;
+    margin-right: 10px;
+}
+
+.infobox-button-container {
+  bottom   : 150px;
+  height   : 40px;
+  right    : 200px;
+  position : absolute;
+  margin   : 10px;  
+
+  -webkit-transition-duration: 1s;
+}
+
+.infobox-button-container-slide {
+  transform: translate(0px, 155px);
+  -ms-transform: translate(0px, 155px);
+  -moz-transform: translate(0px, 155px);
+  -webkit-transform: translate(0px, 155px);
+  -o-transform: translate(0px, 0);
+  -webkit-transition-duration: 1s;
+}
+
+.infobox-button
+{
+  cursor: pointer;
+  height: 25px;
+  width : 60px;
+  right: 0;
+  bottom: 0px;
+  font-family: Roboto,Arial,sans-serif;
+  z-index: 100;
+  background-color: white;
+  border-radius: 2px;
+  padding: 0;
+  border: none;
+  box-shadow: 0px 1px 4px rgba(0,0,0,0.3);
+}
+
+.infobox-button-label {
+  height: 100%;
+  display: block;
+  cursor: pointer;
+  text-align: left;
+  background-repeat: no-repeat;
+  font-size: 12px;
+  font-weight: 400;
+  background-position: 8px;
+  margin-left : 8px;
+  color: #444;
+  font-weight:bold;  
+}
+
+.infobox-button .infobox-button-icon {
+  background-position-y: 0px;
+}
+
+.infobox-button .infobox-button-icon.clicked {
+  background-position-y: -15px;
+}
+
+.infobox-button:hover .infobox-button-icon{
+  background-position-x: -15px;
+}
+
+.infobox-tray-open #infobox-button-label {
+  color: #444;
+  background: none;
+  height: auto;
+  text-align: center;
+  margin-left: 6px;
+  margin-right: 22px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.infobox-button-icon {
+  background: transparent url("../img/expander-sprite-1x.png") 0 0 no-repeat;
+  background-size: 90px 30px;  
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  top: 6px;
+  right: 7px;    
+}
+
+.infobox {
+  display : block !important;
+  position: absolute;
+  bottom : 0px;
+  width: 100%;
+  height: 165px;
+  background-color: #fff;
+  opacity: 0.6;
+  box-shadow: 0px 0px 8px rgba(0,0,0,0.25);
+  border-top: 2px solid white;      
+  z-index : 0;
+      
+  -webkit-transition: height 1.0s;
+  -moz-transition: height 1.0s;
+  -ms-transition: height 1.0s;
+  transition: height 1.0s;  
+}
+
+.infobox-slide {
+  height : 0px;
+  bottom : -10px;
+
+  -webkit-transition-duration: 1s;
+}
+
+.infobox-author {
+  margin : 10px 10px 10px 10px;
+  width  : 150px;
+  height : 100%;
+  float  : left;
+  line-height:170%
+}
+
+.infobox-text {
+  margin : 10px 10px 10px 150px;
+  height: 145px;
+  line-height:170%;
+  overflow:auto;
+}
+
+
