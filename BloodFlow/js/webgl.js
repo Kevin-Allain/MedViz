@@ -340,6 +340,8 @@ function getMouseRealTime() {
             y: event.pageY
         };
     }
+
+    
     function getMousePosition() {
         var pos = mousePos;
         
